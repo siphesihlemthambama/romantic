@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesego Natalia Ndima</title>
+<title>Scroll Background Website</title>
 
 <style>
   * {
@@ -16,6 +16,9 @@
     height: 100%;
     font-family: Arial, sans-serif;
     scroll-behavior: smooth;
+    /* FIX: Prevent iOS bounce/rubber-band scrolling issues */
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   section {
@@ -200,6 +203,14 @@
   z-index: 1;
 }
 
+/* FIX: Make video content clickable on iOS */
+.video-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 #playBtn {
   margin-top: 20px;
@@ -212,6 +223,9 @@
   backdrop-filter: blur(5px);
   cursor: pointer;
   transition: 0.3s ease;
+  /* FIX: Ensure button is tappable on iOS */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 #playBtn:hover {
@@ -252,6 +266,13 @@
   transition: transform 0.2s ease-out;
 }
 
+/* FIX: Ensure SVG stickers display properly */
+.sticker img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 @keyframes wiggle {
   0% { rotate: -4deg; }
   50% { rotate: 4deg; }
@@ -266,6 +287,13 @@
   pointer-events: none;
   z-index: 9999;
   will-change: transform;
+}
+
+/* FIX: Ensure heart SVG images display properly */
+.heart img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 @keyframes floatUp {
@@ -405,9 +433,7 @@ h1, h2, p {
   filter: blur(20px);
   z-index: -1;
 }
-html {
-  scroll-behavior: smooth;
-}
+
 
 
 
@@ -421,12 +447,8 @@ html {
 <body>
 <section class="video-section">
   <div class="video-parallax">
-<video id="bgVideo" autoplay 
-  muted 
-  loop 
-  playsinline 
-  webkit-playsinline
-  preload="auto">
+<!-- FIX: Added muted and webkit-playsinline for iOS autoplay -->
+<video id="bgVideo" loop playsinline webkit-playsinline muted>
     <source src="vid/1.mp4" type="video/mp4">
   </video>
   </div>
@@ -604,9 +626,16 @@ data-heart-style="music">
   const video = document.getElementById("bgVideo");
   const btn = document.getElementById("playBtn");
 
+  // FIX: iOS video playback - unmute and play when user taps
   btn.addEventListener("click", () => {
     if (video.paused) {
-      video.play();
+      video.muted = false; // Unmute on user interaction (required for iOS)
+      video.play().catch(err => {
+        console.log("Video play failed:", err);
+        // Fallback: keep muted if unmuted play fails
+        video.muted = true;
+        video.play();
+      });
       btn.textContent = "Pause";
     } else {
       video.pause();
@@ -614,69 +643,71 @@ data-heart-style="music">
     }
   });
 
+  // FIX: Attempt autoplay muted on page load (works on iOS)
+  window.addEventListener('load', () => {
+    video.play().catch(err => {
+      console.log("Autoplay failed, waiting for user interaction");
+    });
+  });
 
 
   /// Parallax effect for background sections
   const sections = document.querySelectorAll("section");
-  const videos = document.querySelector(".video-parallax video");
 
-  
+  // FIX: Debounce scroll for better iOS performance
+  let scrollTimeout;
   window.addEventListener("scroll", () => {
-
-  let scrollY = window.pageYOffset;
-
-  // 🎨 Background parallax
-  sections.forEach(section => {
-
-    const speed = 0.3;
-    const offset = section.offsetTop;
-    const height = section.offsetHeight;
-
-    if (scrollY > offset - height && scrollY < offset + height) {
-      section.style.backgroundPositionY =
-        (scrollY - offset) * speed + "px";
+    if (scrollTimeout) {
+      window.cancelAnimationFrame(scrollTimeout);
     }
+    
+    scrollTimeout = window.requestAnimationFrame(() => {
+      let scrollY = window.pageYOffset;
 
-  });
+      // 🎨 Background parallax
+      sections.forEach(section => {
+        const speed = 0.3;
+        const offset = section.offsetTop;
+        const height = section.offsetHeight;
 
-  // 🎥 Video parallax
-  const videoSection = document.querySelector(".video-section");
-  const videos = document.querySelector("#bgVideo");
+        if (scrollY > offset - height && scrollY < offset + height) {
+          section.style.backgroundPositionY =
+            (scrollY - offset) * speed + "px";
+        }
+      });
 
-  if (videoSection && videos) {
+      // 🎥 Video parallax
+      const videoSection = document.querySelector(".video-section");
+      const videos = document.querySelector("#bgVideo");
 
-    const rect = videoSection.getBoundingClientRect();
-    const videoSpeed = 0.3;
+      if (videoSection && videos) {
+        const rect = videoSection.getBoundingClientRect();
+        const videoSpeed = 0.3;
 
-    videos.style.transform =
-      `translate(-50%, calc(-50% + ${rect.top * videoSpeed}px))`;
+        videos.style.transform =
+          `translate(-50%, calc(-50% + ${rect.top * videoSpeed}px))`;
+      }
 
-  }
+      // 🧸 Sticker depth + grow/shrink
+      document.querySelectorAll("section[data-stickers]").forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const progress = 1 - Math.abs(rect.top) / window.innerHeight;
+        let scale = Math.max(0.5, Math.min(progress * 1.5, 1.8));
 
-  // 🧸 Sticker depth + grow/shrink
-  document.querySelectorAll(".section[data-stickers]").forEach(section => {
+        const stickers = section.querySelectorAll(".sticker");
 
-    const rect = section.getBoundingClientRect();
-    const progress = 1 - Math.abs(rect.top) / window.innerHeight;
-    let scale = Math.max(0.5, Math.min(progress * 1.5, 1.8));
+        stickers.forEach(sticker => {
+          const speed = sticker.dataset.speed || 0.2;
+          const wiggle = Math.sin(Date.now() * 0.002 + speed * 10) * 4;
 
-    const stickers = section.querySelectorAll(".sticker");
-
-    stickers.forEach(sticker => {
-
-      const speed = sticker.dataset.speed || 0.2;
-      const wiggle = Math.sin(Date.now() * 0.002 + speed * 10) * 4;
-
-      sticker.style.transform =
-        `translateY(${scrollY * speed}px) 
-         scale(${scale}) 
-         rotate(${wiggle}deg)`;
-
+          sticker.style.transform =
+            `translateY(${scrollY * speed}px) 
+             scale(${scale}) 
+             rotate(${wiggle}deg)`;
+        });
+      });
     });
-
   });
-
-});
 
 
   // Optional: Add floating stickers to sections
@@ -734,6 +765,9 @@ function getEdgePosition() {
     const img = document.createElement("img");
     img.src = randomSticker;
     img.classList.add("sticker");
+    // FIX: Add alt text for accessibility and ensure image loads
+    img.alt = "decorative sticker";
+    img.loading = "lazy";
 
     let attempts = 0;
 let left, top;
@@ -829,19 +863,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const heart = document.createElement("div");
     heart.className = "heart";
-    // heart.innerHTML =
-    //   styleArray[Math.floor(Math.random() * styleArray.length)];
+    
     const randomItem =
-  styleArray[Math.floor(Math.random() * styleArray.length)];
+      styleArray[Math.floor(Math.random() * styleArray.length)];
 
-if (randomItem.endsWith(".svg") || randomItem.endsWith(".png")) {
-  const img = document.createElement("img");
-  img.src = randomItem;
-  img.style.width = "30px";
-  heart.appendChild(img);
-} else {
-  heart.innerHTML = randomItem;
-}
+    if (randomItem.endsWith(".svg") || randomItem.endsWith(".png")) {
+      const img = document.createElement("img");
+      img.src = randomItem;
+      img.style.width = "30px";
+      // FIX: Add explicit display block for SVG images
+      img.style.display = "block";
+      img.alt = "floating icon";
+      img.loading = "eager"; // Load immediately for animation
+      heart.appendChild(img);
+    } else {
+      heart.innerHTML = randomItem;
+    }
 
 
     heart.style.left = Math.random() * 100 + "vw";
@@ -901,6 +938,3 @@ if (randomItem.endsWith(".svg") || randomItem.endsWith(".png")) {
 
 </body>
 </html>
-
-
-
