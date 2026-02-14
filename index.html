@@ -405,7 +405,9 @@ h1, h2, p {
   filter: blur(20px);
   z-index: -1;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 
 
 
@@ -419,7 +421,12 @@ h1, h2, p {
 <body>
 <section class="video-section">
   <div class="video-parallax">
-<video id="bgVideo" loop playsinline>
+<video id="bgVideo" autoplay 
+  muted 
+  loop 
+  playsinline 
+  webkit-playsinline
+  preload="auto">
     <source src="vid/1.mp4" type="video/mp4">
   </video>
   </div>
@@ -894,5 +901,6 @@ if (randomItem.endsWith(".svg") || randomItem.endsWith(".png")) {
 
 </body>
 </html>
+
 
 
