@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll Background Website</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    color: white;
+    text-shadow: 2px 2px 10px black;
+
+    /* background-attachment: fixed; */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+  }
+  section iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+  .bg1 {
+    background-image: url('img/1.jpeg');
+  }
+
+  .bg2 {
+    background-image: url('img/2.jpeg');
+  }
+
+  .bg3 {
+    background-image: url('img/3.jpeg');
+  }
+
+  .bg4 {
+    background-image: url('img/4.jpeg');
+  }
+
+  .bg5 {
+    background-image: url('img/5.jpeg');
+  }
+
+  .bg6 {
+    background-image: url('img/6.jpeg');
+  }
+
+  .bg7 {
+    background-image: url('img/7.jpeg');
+  }
+
+  .bg8 {
+    background-image: url('img/8.jpeg');
+  }
+  
+  .bg9 {
+    background-image: url('img/9.jpeg');
+  }
+
+  .bg10 {
+    background-image: url('img/10.jpeg');
+  }
+
+  .bg11 {
+    background-image: url('img/11.jpeg');
+  }
+
+  .bg12 {
+    background-image: url('img/12.jpeg');
+  }
+
+  .bg13 {
+    background-image: url('img/13.jpeg');
+  }
+
+  .bg14 {
+    background-image: url('img/14.jpeg');
+  }
+
+  .bg15 {
+    background-image: url('img/15.jpeg');
+  }
+
+  .bg16 {
+    background-image: url('img/16.jpeg');
+  }
+
+  .bg17 {
+    background-image: url('img/17.jpeg');
+  }
+
+  /* Optional overlay for better text visibility */
+  section::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+
+  background: inherit; /* uses same background image */
+  background-size: cover; /* fills entire screen */
+  background-position: center;
+
+  filter: blur(60px);
+  transform: scale(1.2);
+
+  z-index: -1;
+  }
+
+  section h1 {
+    position: relative;
+    z-index: 1;
+  }
+  iframe {
+  width: 90%;
+  max-width: 560px;
+  height: 315px;
+  border: none;
+}
+.video-section {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  color: white;
+  text-shadow: 2px 2px 10px black;
+  overflow: hidden;
+}
+
+/* Video behaves like background-size: cover */
+.video-section video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+/* Parallax container */
+.video-parallax {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Video fills screen */
+.video-parallax video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110%;      /* slightly bigger for parallax */
+  height: 110%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* Same dark overlay your other sections use */
+.video-section::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 0;
+}
+
+.video-section h1 {
+  position: relative;
+  z-index: 1;
+}
+
+
+#playBtn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#playBtn:hover {
+  background: white;
+  color: black;
+}
+@media (max-width: 768px) {
+
+  .video-parallax {
+    position: absolute;
+    height: 100%;
+  }
+
+  .video-parallax video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: 100%;
+    transform: translate(-50%, -50%);
+  }
+
+}
+
+/* Sticker Container inside each section */
+.sticker-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Stickers */
+.sticker {
+  position: absolute;
+  width: 70px;
+  animation: wiggle 4s ease-in-out infinite;
+  transition: transform 0.2s ease-out;
+}
+
+@keyframes wiggle {
+  0% { rotate: -4deg; }
+  50% { rotate: 4deg; }
+  100% { rotate: -4deg; }
+}
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -50px;
+  animation: floatUp linear forwards;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Cute Romantic Typography */
+
+h1, h2 {
+  font-family: 'Dancing Script', cursive;
+  font-weight: 600;
+  font-size: 3rem;
+  letter-spacing: 1px;
+}
+
+p, span, .text, button {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+h1 {
+  text-shadow: 0 3px 15px rgba(255, 105, 180, 0.3);
+}
+h1 span {
+  color: #ff69b4;
+}
+
+h1, h2, p {
+  padding: 20px;
+}
+
+/* Spotify Playlist CTA Section */
+.spotify-section {
+  position: relative;
+  height: 100vh;
+  background-image: url("https://images.pexels.com/photos/1231265/pexels-photo-1231265.jpeg"); /* example image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.spotify-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+
+.spotify-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+.spotify-content h2 {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 20px;
+}
+
+.click-image {
+  width: 180px;
+  cursor: pointer;
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 10px rgba(255,105,180,0.7));
+}
+
+.click-image:hover {
+  transform: scale(1.12);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Cute Spotify Button */
+
+.cute-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-decoration: none;
+
+  background: linear-gradient(135deg, #ff9ecf, #ff69b4);
+  color: white;
+
+  border-radius: 50px;
+  box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+
+  transition: all 0.3s ease;
+  animation: heartbeat 2s infinite;
+}
+
+/* Hover effect */
+.cute-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 35px rgba(255, 105, 180, 0.6);
+}
+
+/* Heartbeat animation */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  40% { transform: scale(1); }
+  60% { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+.cute-btn {
+  position: relative;
+}
+
+.cute-btn::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 60px;
+  background: rgba(255, 105, 180, 0.3);
+  filter: blur(20px);
+  z-index: -1;
+}
+
+
+
+
+
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+<section class="video-section">
+  <div class="video-parallax">
+<video id="bgVideo" loop playsinline>
+    <source src="vid/1.mp4" type="video/mp4">
+  </video>
+  </div>
+  <div class="video-content">
+    <!-- <h1>Video Section</h1> -->
+    <button id="playBtn">Play</button>
+  </div>
+</section>
+
+<section  class="bg1" 
+          data-stickers="1"
+          data-sticker-count="3"
+          data-heart-style="red">
+  <h1>Happy valentines day!!!!</h1>
+</section>
+
+
+
+<section  class="bg2" 
+          data-stickers="2"
+          data-sticker-count="6"
+          data-heart-style="pink">
+  <h1>Sthandwa sami❤️</h1>
+</section>
+
+<section class="bg3" 
+data-stickers="3"
+data-sticker-count="3"
+data-heart-style="sparkle">
+  <p>And suddenly <br>
+  You became the best part <br>
+   of my days
+</p>
+</section>
+
+<section class="bg4" 
+data-stickers="1"
+data-sticker-count="5"
+data-heart-style="red">
+  <p>And for the first time ever <br>
+  I understood why everyone <br>
+keeps talking about love</p>
+</section>
+<section  class="bg5" 
+          data-stickers="1"
+          data-sticker-count="3"
+          data-heart-style="red">
+  <h2>❤️In case you are ever foolish to forget... <br>
+  I'm never not thinking of you❤️</h2>
+</section>
+
+
+
+<section  class="bg6" 
+          data-stickers="2"
+          data-sticker-count="6"
+          data-heart-style="pink">
+  <p>If the moon ever calls you by name <br>
+  don't be surprised <br>
+because every night I tell her <br>
+about you</p>
+</section>
+
+<section class="bg7" 
+data-stickers="3"
+data-sticker-count="3"
+data-heart-style="sparkle">
+  <p>I may never find words beautiful <br>
+  enough to describe how much <br>
+you mean to me</p>
+</section>
+
+<section class="bg8" 
+data-stickers="1"
+data-sticker-count="5"
+data-heart-style="pink">
+  <p>If i could live life again <br>
+  I would repeat every mistake I've ever made <br>
+As long as it leads me back to you❤️</p>
+</section>
+<section  class="bg9" 
+          data-stickers="1"
+          data-sticker-count="3"
+          data-heart-style="red">
+  <h1>❤️uKgosatsana❤️</h1>
+</section>
+
+
+
+<section  class="bg10" 
+          data-stickers="2"
+          data-sticker-count="6"
+          data-heart-style="pink">
+  <p>Lerato la me,<br>
+o lesedi la pelo ya me. <br>
+<br>
+Fa ke go leba,<br>
+ke bona kagiso le lorato. <br>
+<br>
+O pososelo ya me le mmino wa pelo ya me. <br>
+<br>
+Ke a go rata,<br>
+ka pelo yotlhe.💗<br></p>
+</section>
+
+<section class="bg11" 
+data-stickers="3"
+data-sticker-count="3"
+data-heart-style="sparkle">
+  <h1>👑💖 Inkosazana yami 👑💖</h1>
+</section>
+
+<section class="bg12" 
+data-stickers="1"
+data-sticker-count="5"
+data-heart-style="sparkle">
+  <p>Uthando lwami,<br>
+uyinkanyezi ekhanyisa inhliziyo yami. <br>
+<br>
+Uma ngikubona,<br>
+inhliziyo yami igcwala injabulo. <br>
+<br>
+Ngiyakuthanda,<br>
+ngenhliziyo yami yonke. 💕</p>
+</section>
+<section  class="bg13" 
+          data-stickers="1"
+          data-sticker-count="3"
+          data-heart-style="red">
+</section>
+
+
+
+<section  class="bg14" 
+          data-stickers="2"
+          data-sticker-count="6"
+          data-heart-style="pink">
+</section>
+
+<section class="bg15" 
+data-stickers="3"
+data-sticker-count="3"
+data-heart-style="sparkle">
+</section>
+
+<section class="bg16" 
+data-stickers="1"
+data-sticker-count="5"
+data-heart-style="red">
+</section>
+<section  class="bg17" 
+          data-stickers="1"
+          data-sticker-count="3"
+          data-heart-style="red">
+</section>
+
+<section class="spotify-section"
+data-heart-style="music">
+
+  <div class="spotify-content">
+    <h2>For You My Princess 💕</h2>
+
+    <a href="https://open.spotify.com/playlist/4VZq7vH3YcVqNA0aL2NvPG?si=YXcC2wFkRHKDpC0DWw4iOw&pi=WGwfS8qVQwmAm"
+       target="_blank"
+       class="cute-btn">
+       Tap Me 🎵💖
+    </a>
+
+  </div>
+
+</section>
+
+
+<script>
+  const video = document.getElementById("bgVideo");
+  const btn = document.getElementById("playBtn");
+
+  btn.addEventListener("click", () => {
+    if (video.paused) {
+      video.play();
+      btn.textContent = "Pause";
+    } else {
+      video.pause();
+      btn.textContent = "Play";
+    }
+  });
+
+
+
+  /// Parallax effect for background sections
+  const sections = document.querySelectorAll("section");
+  const videos = document.querySelector(".video-parallax video");
+
+  
+  window.addEventListener("scroll", () => {
+
+  let scrollY = window.pageYOffset;
+
+  // 🎨 Background parallax
+  sections.forEach(section => {
+
+    const speed = 0.3;
+    const offset = section.offsetTop;
+    const height = section.offsetHeight;
+
+    if (scrollY > offset - height && scrollY < offset + height) {
+      section.style.backgroundPositionY =
+        (scrollY - offset) * speed + "px";
+    }
+
+  });
+
+  // 🎥 Video parallax
+  const videoSection = document.querySelector(".video-section");
+  const videos = document.querySelector("#bgVideo");
+
+  if (videoSection && videos) {
+
+    const rect = videoSection.getBoundingClientRect();
+    const videoSpeed = 0.3;
+
+    videos.style.transform =
+      `translate(-50%, calc(-50% + ${rect.top * videoSpeed}px))`;
+
+  }
+
+  // 🧸 Sticker depth + grow/shrink
+  document.querySelectorAll(".section[data-stickers]").forEach(section => {
+
+    const rect = section.getBoundingClientRect();
+    const progress = 1 - Math.abs(rect.top) / window.innerHeight;
+    let scale = Math.max(0.5, Math.min(progress * 1.5, 1.8));
+
+    const stickers = section.querySelectorAll(".sticker");
+
+    stickers.forEach(sticker => {
+
+      const speed = sticker.dataset.speed || 0.2;
+      const wiggle = Math.sin(Date.now() * 0.002 + speed * 10) * 4;
+
+      sticker.style.transform =
+        `translateY(${scrollY * speed}px) 
+         scale(${scale}) 
+         rotate(${wiggle}deg)`;
+
+    });
+
+  });
+
+});
+
+
+  // Optional: Add floating stickers to sections
+ const stickerSets = {
+  1: [
+    "stickers/1.png",
+    "stickers/2.png",
+    "stickers/7.png",
+    "stickers/10.png",
+    "stickers/5.png",
+  ],
+  2: [
+    "stickers/3.png",
+    "stickers/4.png",
+      "stickers/8.png",
+    "stickers/1.png",
+     "stickers/6.png"
+  ],
+  3: [
+    "stickers/5.png",
+    "stickers/6.png",
+    "stickers/9.png",
+    "stickers/2.png",
+    "stickers/7.png"
+  ]
+};
+
+document.querySelectorAll("section[data-stickers]").forEach(section => {
+
+  const setNumber = section.dataset.stickers;
+  const count = parseInt(section.dataset.stickerCount) || 4;
+
+  if (!stickerSets[setNumber]) return; // ✅ prevents crash
+
+  const layer = document.createElement("div");
+  layer.classList.add("sticker-layer");
+  section.appendChild(layer);
+
+  const placedPositions = [];
+
+function getEdgePosition() {
+  return Math.random() < 0.5
+    ? Math.random() * 25           // left 0–25%
+    : 75 + Math.random() * 25;     // right 75–100%
+}
+
+
+  for (let i = 0; i < count; i++) {
+
+    const randomSticker =
+      stickerSets[setNumber][
+        Math.floor(Math.random() * stickerSets[setNumber].length)
+      ];
+
+    const img = document.createElement("img");
+    img.src = randomSticker;
+    img.classList.add("sticker");
+
+    let attempts = 0;
+let left, top;
+
+do {
+  left = getEdgePosition();
+  top = Math.random() * 85;
+  attempts++;
+}
+while (
+  placedPositions.some(pos =>
+    Math.abs(pos.left - left) < 18 &&
+    Math.abs(pos.top - top) < 18
+  ) && attempts < 50
+);
+
+placedPositions.push({ left, top });
+
+img.style.left = left + "%";
+img.style.top = top + "%";
+
+
+    const depth = Math.random();
+
+if (depth < 0.33) {
+  img.style.zIndex = 1;
+  img.dataset.speed = 0.1;
+  img.style.opacity = 0.7;
+}
+else if (depth < 0.66) {
+  img.style.zIndex = 5;
+  img.dataset.speed = 0.3;
+  img.style.opacity = 0.9;
+}
+else {
+  img.style.zIndex = 9;
+  img.dataset.speed = 0.5;
+  img.style.opacity = 1;
+}
+
+
+    layer.appendChild(img);
+  }
+});
+
+
+/* Grow/Shrink Per Section */
+window.addEventListener("scroll", () => {
+  document.querySelectorAll("section[data-stickers]").forEach(section => {
+    const rect = section.getBoundingClientRect();
+    const stickers = section.querySelectorAll(".sticker");
+
+    const progress = 1 - Math.abs(rect.top) / window.innerHeight;
+
+    stickers.forEach(sticker => {
+      let scale = Math.max(0.5, Math.min(progress * 1.5, 1.8));
+      sticker.style.transform = `scale(${scale})`;
+    });
+  });
+});
+// Optional: Add floating hearts to sections
+document.addEventListener("DOMContentLoaded", () => {
+
+  const heartStyles = {
+    red: ["❤️","💖","💘"],
+    pink: ["💗","💕","💓"],
+    sparkle: ["💞","✨","🌸"],
+    music:["stickers/spotify_icon.svg","stickers/apple_music_icon.svg"]
+  };
+
+  function getActiveSection() {
+    const sections = document.querySelectorAll("section");
+    let active = sections[0];
+
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= window.innerHeight / 2 &&
+          rect.bottom >= window.innerHeight / 2) {
+        active = section;
+      }
+    });
+
+    return active;
+  }
+
+  function createHeart() {
+
+    const activeSection = getActiveSection();
+    if (!activeSection) return;
+
+    const styleName = activeSection.dataset.heartStyle || "red";
+    const styleArray = heartStyles[styleName] || heartStyles.red;
+
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    // heart.innerHTML =
+    //   styleArray[Math.floor(Math.random() * styleArray.length)];
+    const randomItem =
+  styleArray[Math.floor(Math.random() * styleArray.length)];
+
+if (randomItem.endsWith(".svg") || randomItem.endsWith(".png")) {
+  const img = document.createElement("img");
+  img.src = randomItem;
+  img.style.width = "30px";
+  heart.appendChild(img);
+} else {
+  heart.innerHTML = randomItem;
+}
+
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 25 + 15) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    heart.dataset.move = "-120vh";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 6000);
+  }
+
+  setInterval(createHeart, 300);
+
+});
+
+
+
+  function animateHearts() {
+
+    if (!analyser) return;
+
+    requestAnimationFrame(animateHearts);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    let bass = dataArray[1]; // low frequency punch
+    let intensity = 1 + (bass / 255) * 1.8; // strong TikTok-style pulse
+
+    document.querySelectorAll(".heart").forEach(heart => {
+      heart.style.transform =
+        `translateY(${heart.dataset.move || 0}) scale(${intensity})`;
+    });
+  }
+
+  // Hook into video play
+  video.addEventListener("play", () => {
+
+    if (!audioContext) {
+      setupAudioAnalysis();
+    }
+
+    if (!animationRunning) {
+      animateHearts();
+      animationRunning = true;
+    }
+
+  });
+
+
+
+  
+</script>
+
+
+</body>
+</html>
+
